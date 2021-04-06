@@ -44,14 +44,13 @@ public class MenuChoosen {
         System.out.println("----------------");
         System.out.print("Lua chon:");
         Integer choosenIndex = 0;
-        BufferedReader reader = new BufferedReader(
-            new InputStreamReader(System.in));
+       IOHelper io = new IOHelper();
   
         // Reading data using readLine
         
         while (choosenIndex == 0) {
             try {
-                choosenIndex = Integer.parseInt(reader.readLine());
+                choosenIndex = io.readInt();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
