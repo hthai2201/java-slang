@@ -101,6 +101,7 @@ public class Main {
             try {
                 Boolean isOverride = false;
                 Boolean isDuplicate = false;
+                Boolean isContinue = true;
                 String key = "";
                 String value = "";
                 Integer i = 10;
@@ -117,23 +118,33 @@ public class Main {
                     key = io.readLine();
                     if (!key.equals("")) {
                         if (slang.containsKey(key)) {
+                            String oldValue = slang.get(key);
                             // key exisit
+                            Utils.printlnPair(key,oldValue);
                             ChoosenMenuItem choosenMenu = keyErrorMenuChoosen.renderMenu();
+                            if (choosenMenu == null) {
+                                isContinue = false;
+                                break;  
+                            }
                             if (choosenMenu.value.equals("override")) {
                                 isOverride = true;
                                 break;
                             }
                             if (choosenMenu.value.equals("duplicate")) {
                                 isDuplicate= true;
+                                break;
                             }
 
+                        }else{
+                            break;
                         }
 
                     } else {
                         System.out.println("Bạn chưa nhập từ cần thêm");
                     }
                 }
-                if (key.equals("")) {
+               
+                if (!isContinue || key.equals("")) {
                     nextAction();
                     break;
                 }
@@ -161,7 +172,7 @@ public class Main {
                 slang.put(key, value);
                 Utils.printlnPair(key, value);
                 if (isOverride) {
-                    System.out.println("Cpậ nhật từ  thành công");
+                    System.out.println("Cập nhật từ  thành công");
                 } else {
                     System.out.println("Thêm từ mới thành công");
                 }
@@ -192,9 +203,8 @@ public class Main {
                                 slang.remove(key);
                                 Utils.printlnPair(key, value);
                                 System.out.println("Xoá từ thành công");
-                            } else {
-                                break;
-                            }
+                            } 
+                            break;
 
                         } else {
                             Utils.printlnPair(key, "Không tìm thấy từ trong hệ thống");
@@ -249,7 +259,7 @@ public class Main {
         List<ChoosenMenuItem> l1Menu = new ArrayList<ChoosenMenuItem>();
         l1Menu.add(new ChoosenMenuItem(trueText, "true", null));
         l1Menu.add(new ChoosenMenuItem(falseText, "false", null));
-        MenuChoosen menu = new MenuChoosen(new ChoosenMenuItem(message, "confirm", l1Menu));
+        MenuChoosen menu = new MenuChoosen(new ChoosenMenuItem(message, "confirm", l1Menu),false);
         ChoosenMenuItem choose = menu.renderMenu();
 
         return choose.value == "true";

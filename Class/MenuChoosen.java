@@ -15,6 +15,14 @@ public class MenuChoosen {
     public MenuChoosen(ChoosenMenuItem menu){
         this.menu = menu;
     }
+    public MenuChoosen(ChoosenMenuItem menu,Boolean isOut){
+        this(menu);
+        this.isOut = isOut;
+    }
+    public MenuChoosen(ChoosenMenuItem menu,Boolean isOut,Boolean isBack){
+        this(menu,isOut);
+        this.isBack=isBack;
+    }
     //render
     public ChoosenMenuItem renderMenu() throws IOException {
         int choosenN = this.choosenMenu.size();
@@ -61,6 +69,7 @@ public class MenuChoosen {
         if (choosenIndex < 0 || choosenIndex >= curMenuN) {
             if (choosenIndex == curMenuN) {
                 this.choosenMenu.remove(curMenuN-1);
+                return null;
             }
             if (choosenIndex == curMenuN+1) {
                 return null;
