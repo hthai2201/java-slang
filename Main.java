@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.AbstractMap.SimpleEntry;
@@ -12,19 +13,20 @@ public class Main {
     private static SlangHashMap slang = new SlangHashMap();
     private static MenuChoosen mainMenu;
     private static IOHelper io = new IOHelper();
+    private static final String slangFilePath = "slang2.txt";
 
     public static void main(String[] args) {
-        slang.importData("slang2.txt");
+        slang.importData(slangFilePath);
         mainMenu = Main.getMainMenu();
         while (true) {
             try {
                 ChoosenMenuItem choosen = mainMenu.renderMenu();
                 if (choosen != null) {
                     Main.navigate(choosen);
-                }else {
+                } else {
                     break;
                 }
-                
+
             } catch (Exception e) {
                 // TODO: handle exception
                 System.out.println(e);
@@ -74,7 +76,7 @@ public class Main {
             nextAction();
             break;
         }
-        
+
         case "findMean": {
 
             try {
@@ -94,14 +96,130 @@ public class Main {
             nextAction();
             break;
         }
-        
+        case "add": {
+
+            try {
+                Boolean isOverride = false;
+                Boolean isDuplicate = false;
+                String key = "";
+                String value = "";
+                Integer i = 10;
+                List<ChoosenMenuItem> keyErrorMenu = new ArrayList<ChoosenMenuItem>();
+                keyErrorMenu.add(new ChoosenMenuItem("Ghi đè từ cũ", "override", null));
+                keyErrorMenu.add(new ChoosenMenuItem("Nhân bản ra từ mới", "duplicate", null));
+                keyErrorMenu.add(new ChoosenMenuItem("Nhập lại", "rewrite", null));
+                MenuChoosen keyErrorMenuChoosen = new MenuChoosen(
+                        new ChoosenMenuItem("Từ đã tồn tại, vui lòng chọn: ", "menu", keyErrorMenu));
+                while (i > 0) {
+                    i--;
+
+                    System.out.print("Nhập từ: ");
+                    key = io.readLine();
+                    if (!key.equals("")) {
+                        if (slang.containsKey(key)) {
+                            // key exisit
+                            ChoosenMenuItem choosenMenu = keyErrorMenuChoosen.renderMenu();
+                            if (choosenMenu.value.equals("override")) {
+                                isOverride = true;
+                                break;
+                            }
+                            if (choosenMenu.value.equals("duplicate")) {
+                                isDuplicate= true;
+                            }
+
+                        }
+
+                    } else {
+                        System.out.println("Bạn chưa nhập từ cần thêm");
+                    }
+                }
+                if (key.equals("")) {
+                    nextAction();
+                    break;
+                }
+                i = 10;
+                while (i > 0) {
+                    i--;
+
+                    System.out.print("Nhập nghĩa của từ: ");
+                    value = io.readLine();
+                    if (!value.equals("")) {
+                        break;
+                    } else {
+                        System.out.println("Bạn chưa nhập nghĩa từ cần thêm");
+                    }
+
+                }
+                if (value.equals("")) {
+                    nextAction();
+                    break;
+                }
+                if (isDuplicate) {
+                    String oldValue = slang.get(key);
+                    value = oldValue + " | " + value;
+                }
+                slang.put(key, value);
+                Utils.printlnPair(key, value);
+                if (isOverride) {
+                    System.out.println("Cpậ nhật từ  thành công");
+                } else {
+                    System.out.println("Thêm từ mới thành công");
+                }
+
+            } catch (Exception e) {
+                // TODO: handle exception
+                System.out.println("Đã có lỗi xãy ra");
+            }
+            nextAction();
+            break;
+        }
+        case "del": {
+
+            try {
+                String key;
+                Integer i = 10;
+                while (i > 0) {
+                    i--;
+
+                    System.out.print("Nhập từ: ");
+                    key = io.readLine();
+                    if (!key.equals("")) {
+                        if (slang.containsKey(key)) {
+                            // key exisit
+                            String value = slang.get(key);
+                            Utils.printlnPair(key, value);
+                            if (Main.renderMenuConfirm("Bạn có chắc muốn xoá từ này")) {
+                                slang.remove(key);
+                                Utils.printlnPair(key, value);
+                                System.out.println("Xoá từ thành công");
+                            } else {
+                                break;
+                            }
+
+                        } else {
+                            Utils.printlnPair(key, "Không tìm thấy từ trong hệ thống");
+                        }
+
+                    } else {
+                        System.out.println("Bạn chưa nhập từ cần thêm");
+                    }
+                }
+
+            } catch (Exception e) {
+                // TODO: handle exception
+                System.out.println("Đã có lỗi xãy ra");
+            }
+            nextAction();
+            break;
+        }
+
         case "reset": {
-            slang.importData("slang.txt");
+            slang.importData(slangFilePath);
             nextAction();
             break;
         }
         case "export": {
-            slang.exportData("slang2.txt");
+            slang.exportData(slangFilePath);
             nextAction();
             break;
         }
@@ -117,11 +235,25 @@ public class Main {
             break;
         }
     }
+
     public static void nextAction() {
         System.out.println("Ấn phím bất kì để tiếp tục");
         io.readLineNoCatch();
         mainMenu.popChoosen();
     }
 
-    
+    public static Boolean renderMenuConfirm(String message) throws IOException {
+        String trueText = "Có";
+        String falseText = "Không";
+
+        List<ChoosenMenuItem> l1Menu = new ArrayList<ChoosenMenuItem>();
+        l1Menu.add(new ChoosenMenuItem(trueText, "true", null));
+        l1Menu.add(new ChoosenMenuItem(falseText, "false", null));
+        MenuChoosen menu = new MenuChoosen(new ChoosenMenuItem(message, "confirm", l1Menu));
+        ChoosenMenuItem choose = menu.renderMenu();
+
+        return choose.value == "true";
+
+    }
+
 }
