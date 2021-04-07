@@ -6,6 +6,7 @@ import Class.ChoosenMenuItem;
 import Class.IOHelper;
 import Class.MenuChoosen;
 import Class.SlangHashMap;
+import Class.Utils;
 
 public class Main {
     private static SlangHashMap slang = new SlangHashMap();
@@ -13,7 +14,7 @@ public class Main {
     private static IOHelper io = new IOHelper();
 
     public static void main(String[] args) {
-        slang.importData("slang.txt");
+        slang.importData("slang2.txt");
         mainMenu = Main.getMainMenu();
         while (true) {
             try {
@@ -41,6 +42,7 @@ public class Main {
         l1Menu.add(new ChoosenMenuItem("Sửa từ", "edit", null));
         l1Menu.add(new ChoosenMenuItem("Xoá từ", "del", null));
         l1Menu.add(new ChoosenMenuItem("Khôi phục danh sách từ gốc", "reset", null));
+        l1Menu.add(new ChoosenMenuItem("Xuất danh sách từ", "export", null));
         l1Menu.add(new ChoosenMenuItem("Hiển thị từ ngẫu nhiên", "ramdonWord", null));
         l1Menu.add(new ChoosenMenuItem("Đố vui,Tìm nghĩa của từ", "findMeanQuiz", null));
         l1Menu.add(new ChoosenMenuItem("Đố vui,Tìm từ theo nghĩa", "findWordQuiz", null));
@@ -60,9 +62,29 @@ public class Main {
                 String key = io.readLine();
                 String result = slang.get(key);
                 if (result != null) {
-                    printlnPair(key, result);
+                    Utils.printlnPair(key, result);
                 } else {
-                    printlnPair(key, "Không tìm thấy từ trong hệ thống");
+                    Utils.printlnPair(key, "Không tìm thấy từ trong hệ thống");
+                }
+
+            } catch (Exception e) {
+                // TODO: handle exception
+                System.out.println("Đã có lỗi xãy ra");
+            }
+            nextAction();
+            break;
+        }
+        
+        case "findMean": {
+
+            try {
+                System.out.print("Nhập từ cần tìm: ");
+                String value = io.readLine();
+                String result = slang.getValue(value);
+                if (result != null) {
+                    Utils.printlnPair(value, result);
+                } else {
+                    Utils.printlnPair(value, "Không tìm thấy từ trong hệ thống");
                 }
 
             } catch (Exception e) {
@@ -78,9 +100,14 @@ public class Main {
             nextAction();
             break;
         }
+        case "export": {
+            slang.exportData("slang2.txt");
+            nextAction();
+            break;
+        }
         case "ramdonWord": {
             SimpleEntry<String, String> result = slang.ramdonWord();
-            printlnPair(result);
+            Utils.printlnPair(result);
             nextAction();
             break;
         }
@@ -90,18 +117,11 @@ public class Main {
             break;
         }
     }
-
-    public static void printlnPair(String key, String value) {
-        System.out.println(key + " - " + value);
-    }
-
-    public static void printlnPair(SimpleEntry<String, String> entry) {
-        System.out.println(entry.getKey() + " - " + entry.getValue());
-    }
-
     public static void nextAction() {
         System.out.println("Ấn phím bất kì để tiếp tục");
         io.readLineNoCatch();
         mainMenu.popChoosen();
     }
+
+    
 }
