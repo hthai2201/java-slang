@@ -28,6 +28,18 @@ public class SlangHashMap extends HashMap<String, String> {
         String value = this.get(randomKey);
         return new SimpleEntry<String, String>(randomKey, value);
     }
+    public List<SimpleEntry<String, String>> ramdon4Word() {
+        Random random = new Random();
+        List<String> keys = new ArrayList<String>(this.keySet());
+        List<SimpleEntry<String, String>> result = new ArrayList<SimpleEntry<String, String>>();
+        for (int i = 0; i < 4; i++) {
+            String key = keys.get(random.nextInt(keys.size()));
+            String value = this.get(key);
+            result.add(new SimpleEntry<String, String>(key,value));
+        }
+        
+        return result;
+    }
 
     public void importData(String path) {
         if (path.equals("") || path == null) {

@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.text.DefaultStyledDocument.ElementSpec;
+
 public class MenuChoosen {
     ChoosenMenuItem menu;
     List<Integer> choosenMenu = new  ArrayList<Integer>();
@@ -47,21 +49,34 @@ public class MenuChoosen {
             System.out.println((curMenuN +1) + ". Quay lai");
         }
         if (this.isOut) {
-            System.out.println((curMenuN +2) + ". Thoat");
+            if (this.isBack) {
+                System.out.println((curMenuN +2) + ". Thoat");
+            }else{
+                System.out.println((curMenuN +1) + ". Thoat");
+            }
+            
         }
         System.out.println("----------------");
-        System.out.print("Lua chon:");
+        
         Integer choosenIndex = 0;
        IOHelper io = new IOHelper();
   
         // Reading data using readLine
         
-        while (choosenIndex == 0) {
+        while (true){
+            System.out.print("Lua chon:");
             try {
                 choosenIndex = io.readInt();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
+            } catch (NumberFormatException e){
+               //
+            }
+            if (choosenIndex  <1 || choosenIndex >= curMenuN +2) {
+                System.out.println("Lựa chọn không hợp lệ!!");
+            }else{
+                break;
             }
         }
         choosenIndex -= 1;
@@ -71,9 +86,16 @@ public class MenuChoosen {
                 this.choosenMenu.remove(curMenuN-1);
                 return null;
             }
-            if (choosenIndex == curMenuN+1) {
-                return null;
+            if (this.isBack) {
+                if (choosenIndex == curMenuN+1) {
+                    return null;
+                }
+            }else{
+                if (choosenIndex == curMenuN) {
+                    return null;
+                }
             }
+            
             
             return this.renderMenu();
         }

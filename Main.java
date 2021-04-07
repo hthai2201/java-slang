@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.AbstractMap.SimpleEntry;
 
 import Class.ChoosenMenuItem;
@@ -46,15 +48,15 @@ public class Main {
         l1Menu.add(new ChoosenMenuItem("Khôi phục danh sách từ gốc", "reset", null));
         l1Menu.add(new ChoosenMenuItem("Xuất danh sách từ", "export", null));
         l1Menu.add(new ChoosenMenuItem("Hiển thị từ ngẫu nhiên", "ramdonWord", null));
-        l1Menu.add(new ChoosenMenuItem("Đố vui,Tìm nghĩa của từ", "findMeanQuiz", null));
-        l1Menu.add(new ChoosenMenuItem("Đố vui,Tìm từ theo nghĩa", "findWordQuiz", null));
+        l1Menu.add(new ChoosenMenuItem("Đố vui,Tìm nghĩa của từ", "findWordQuiz", null));
+        l1Menu.add(new ChoosenMenuItem("Đố vui,Tìm từ theo nghĩa", "findMeanQuiz", null));
 
         ChoosenMenuItem menu = new ChoosenMenuItem("Danh sách chức năng", "main", l1Menu);
         MenuChoosen mainMenu = new MenuChoosen(menu);
         return mainMenu;
     }
 
-    public static void navigate(ChoosenMenuItem item) {
+    public static void navigate(ChoosenMenuItem item) throws IOException {
 
         switch (item.value) {
         case "findWord": {
@@ -120,22 +122,22 @@ public class Main {
                         if (slang.containsKey(key)) {
                             String oldValue = slang.get(key);
                             // key exisit
-                            Utils.printlnPair(key,oldValue);
+                            Utils.printlnPair(key, oldValue);
                             ChoosenMenuItem choosenMenu = keyErrorMenuChoosen.renderMenu();
                             if (choosenMenu == null) {
                                 isContinue = false;
-                                break;  
+                                break;
                             }
                             if (choosenMenu.value.equals("override")) {
                                 isOverride = true;
                                 break;
                             }
                             if (choosenMenu.value.equals("duplicate")) {
-                                isDuplicate= true;
+                                isDuplicate = true;
                                 break;
                             }
 
-                        }else{
+                        } else {
                             break;
                         }
 
@@ -143,7 +145,7 @@ public class Main {
                         System.out.println("Bạn chưa nhập từ cần thêm");
                     }
                 }
-               
+
                 if (!isContinue || key.equals("")) {
                     nextAction();
                     break;
@@ -203,7 +205,7 @@ public class Main {
                                 slang.remove(key);
                                 Utils.printlnPair(key, value);
                                 System.out.println("Xoá từ thành công");
-                            } 
+                            }
                             break;
 
                         } else {
@@ -239,6 +241,69 @@ public class Main {
             nextAction();
             break;
         }
+      
+        case "findWordQuiz": {
+            Random random = new Random();
+            List<SimpleEntry<String, String>> result = slang.ramdon4Word();
+
+            List<ChoosenMenuItem> l1Menu = new ArrayList<ChoosenMenuItem>();
+            result.forEach(e -> l1Menu.add(new ChoosenMenuItem(e.getValue(), e.getKey(), null)));
+            SimpleEntry<String, String> answer = result.get(random.nextInt(result.size()));
+            Integer times = result.size() - 1;
+            MenuChoosen menu = new MenuChoosen(
+                    new ChoosenMenuItem("Nghĩa của từ \"" + answer.getKey() + "\": ", "confirm", l1Menu), false);
+
+            while (times > 0) {
+                ChoosenMenuItem choose = menu.renderMenu();
+                if (choose == null) {
+                    break;
+                }
+                if (choose.value.equals(answer.getKey())) {
+                    // true
+                    Utils.printlnPair(answer);
+                    System.out.println("Đáp án của bạn hoàn toàn chính xác");
+                    break;
+                } else {
+                    System.out.println("Sai rồi!!!, Hãy thử lại");
+                }
+                menu.popChoosen(); 
+                times--;
+            }
+
+            nextAction();
+            break;
+        }
+        case "findMeanQuiz": {
+            Random random = new Random();
+            List<SimpleEntry<String, String>> result = slang.ramdon4Word();
+
+            List<ChoosenMenuItem> l1Menu = new ArrayList<ChoosenMenuItem>();
+            result.forEach(e -> l1Menu.add(new ChoosenMenuItem(e.getKey(), e.getKey(), null)));
+            SimpleEntry<String, String> answer = result.get(random.nextInt(result.size()));
+            Integer times = result.size() - 1;
+            MenuChoosen menu = new MenuChoosen(
+                    new ChoosenMenuItem("Từ của định nghĩa \"" + answer.getValue() + "\": ", "confirm", l1Menu), false);
+
+            while (times > 0) {
+                ChoosenMenuItem choose = menu.renderMenu();
+                if (choose == null) {
+                    break;
+                }
+                if (choose.value.equals(answer.getKey())) {
+                    // true
+                    Utils.printlnPair(answer);
+                    System.out.println("Đáp án của bạn hoàn toàn chính xác");
+                    break;
+                } else {
+                    System.out.println("Sai rồi!!!, Hãy thử lại");
+                }
+                menu.popChoosen(); 
+                times--;
+            }
+
+            nextAction();
+            break;
+        }
 
         default:
             nextAction();
@@ -259,7 +324,7 @@ public class Main {
         List<ChoosenMenuItem> l1Menu = new ArrayList<ChoosenMenuItem>();
         l1Menu.add(new ChoosenMenuItem(trueText, "true", null));
         l1Menu.add(new ChoosenMenuItem(falseText, "false", null));
-        MenuChoosen menu = new MenuChoosen(new ChoosenMenuItem(message, "confirm", l1Menu),false);
+        MenuChoosen menu = new MenuChoosen(new ChoosenMenuItem(message, "confirm", l1Menu), false);
         ChoosenMenuItem choose = menu.renderMenu();
 
         return choose.value == "true";
