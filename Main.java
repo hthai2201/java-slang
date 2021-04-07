@@ -1,9 +1,9 @@
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.Map.Entry;
 
 import Class.ChoosenMenuItem;
 import Class.IOHelper;
@@ -13,12 +13,15 @@ import Class.Utils;
 
 public class Main {
     private static SlangHashMap slang = new SlangHashMap();
+    private static SlangHashMap slangHistory = new SlangHashMap();
     private static MenuChoosen mainMenu;
     private static IOHelper io = new IOHelper();
     private static final String slangFilePath = "slang2.txt";
+    private static final String slangHistoryFilePath = "slangHistory.txt";
 
     public static void main(String[] args) {
         slang.importData(slangFilePath);
+        slangHistory.importData(slangHistoryFilePath);
         mainMenu = Main.getMainMenu();
         while (true) {
             try {
@@ -64,9 +67,11 @@ public class Main {
             try {
                 System.out.print("Nhập từ cần tìm: ");
                 String key = io.readLine();
-                String result = slang.get(key);
-                if (result != null) {
-                    Utils.printlnPair(key, result);
+                String value = slang.get(key);
+                if (value != null) {
+                    Utils.printlnPair(key, value);
+                    slangHistory.put(key, value);
+                    slangHistory.exportData(slangHistoryFilePath);
                 } else {
                     Utils.printlnPair(key, "Không tìm thấy từ trong hệ thống");
                 }
@@ -82,18 +87,40 @@ public class Main {
         case "findMean": {
 
             try {
-                System.out.print("Nhập từ cần tìm: ");
+                System.out.print("Nhập nghĩa của từ cần tìm: ");
                 String value = io.readLine();
-                String result = slang.getValue(value);
+                List<SimpleEntry<String,String>> result = slang.searchValue(value);
                 if (result != null) {
-                    Utils.printlnPair(value, result);
+                    result.forEach(e -> slangHistory.put(e.getKey(),e.getValue()));
+                    slangHistory.exportData(slangHistoryFilePath);
                 } else {
                     Utils.printlnPair(value, "Không tìm thấy từ trong hệ thống");
                 }
 
             } catch (Exception e) {
                 // TODO: handle exception
-                System.out.println("Đã có lỗi xãy ra");
+                //System.out.println("Đã có lỗi xãy ra");
+                System.out.println(e);
+            }
+            nextAction();
+            break;
+        }
+        case "history": {
+
+            try {
+                System.out.println("--------- Lịch sử tìm kiếm từ ---------");
+                for(Entry<String, String> entry : slangHistory.entrySet()) {
+                    Utils.printlnPair(entry);
+                }
+                if (Main.renderMenuConfirm("Bạn có  muốn xoá  lịch sử tìm kiếm không")) {
+                    slangHistory.clear();
+                    slangHistory.exportData(slangHistoryFilePath);
+                    System.out.println("Xoá lịch sử tìm kiếm thành công");
+                }
+            } catch (Exception e) {
+                // TODO: handle exception
+                //System.out.println("Đã có lỗi xãy ra");
+                System.out.println(e);
             }
             nextAction();
             break;
@@ -330,5 +357,4 @@ public class Main {
         return choose.value == "true";
 
     }
-
-}
+ }

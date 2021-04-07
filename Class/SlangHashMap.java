@@ -112,18 +112,20 @@ public class SlangHashMap extends HashMap<String, String> {
 
     }
 
-    public String getValue(String value) {
+    public List<SimpleEntry<String,String>> searchValue(String value) {
         long start = System.nanoTime();
-        List<String> test = new ArrayList<String>();
+        List<String> matched = new ArrayList<String>();
+        List<SimpleEntry<String,String>> matchedReturn = new ArrayList<SimpleEntry<String,String>>();
 
         // call the method
         this.entrySet().stream().forEach(e -> {
                 if (e.getValue().contains(value)) {
                 //Utils.printlnPair(e);
-                test.add(e.getKey() + " - " +  e.getValue()) ;
+                matched.add(e.getKey() + " - " +  e.getValue()) ;
+                //matchedReturn.add(new SimpleEntry<String,String>(e));
             }
         });
-        System.out.println(String.join("\n", test));
+        System.out.println(String.join("\n", matched));
         // get the end time
         long end = System.nanoTime();
 
@@ -131,7 +133,7 @@ public class SlangHashMap extends HashMap<String, String> {
         long execution = end - start;
         System.out.println("Execution time: " + execution/1000000 + " nanoseconds");
 
-        return null;
+        return matchedReturn;
     }
 
 }
