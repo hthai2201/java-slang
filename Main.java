@@ -86,24 +86,32 @@ public class Main {
         }
 
         case "findMean": {
-
+            
             try {
+                
                 System.out.print("Nhập nghĩa của từ cần tìm: ");
                 String value = io.readLine();
-                List<SimpleEntry<String, String>> result = slang.searchValue(value);
+                List<String> result = slang.searchValue(value);
                 if (result != null) {
-                    result.forEach(e -> slangHistory.put(e.getKey(), e.getValue()));
+
+                    result.forEach((String e) -> {
+                        String[] temp = e.split(" - ");
+                        slangHistory.put(temp[0], temp[1]);
+                    });
                     slangHistory.exportData(slangHistoryFilePath);
                 } else {
                     Utils.printlnPair(value, "Không tìm thấy từ trong hệ thống");
                 }
+                
 
             } catch (Exception e) {
                 // TODO: handle exception
                 // System.out.println("Đã có lỗi xãy ra");
                 System.out.println(e);
             }
+            
             nextAction();
+           
             break;
         }
         case "history": {

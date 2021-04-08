@@ -8,10 +8,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class SlangHashMap extends HashMap<String, String> {
@@ -112,10 +110,9 @@ public class SlangHashMap extends HashMap<String, String> {
 
     }
 
-    public List<SimpleEntry<String,String>> searchValue(String value) {
+    public List<String> searchValue(String value) {
         long start = System.nanoTime();
         List<String> matched = new ArrayList<String>();
-        List<SimpleEntry<String,String>> matchedReturn = new ArrayList<SimpleEntry<String,String>>();
 
         // call the method
         this.entrySet().stream().forEach(e -> {
@@ -126,14 +123,12 @@ public class SlangHashMap extends HashMap<String, String> {
             }
         });
         System.out.println(String.join("\n", matched));
-        // get the end time
+        System.out.println("Tổng số từ: "+matched.size());
+
         long end = System.nanoTime();
-
-        // execution time
-        long execution = end - start;
-        System.out.println("Execution time: " + execution/1000000 + " nanoseconds");
-
-        return matchedReturn;
+        long execution = end- start;
+        System.out.println("Thời gian tìm kiếm: " + execution/1000000 + "milliseconds");
+        return matched;
     }
 
 }
