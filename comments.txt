@@ -1,0 +1,4 @@
+javac -d ./build -encoding UTF-8 *.java
+cd build
+jar cvfe YourJar.jar Hello  *
+java -jar YourJar.jar
