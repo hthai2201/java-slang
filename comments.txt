@@ -1,4 +1,0 @@
-javac -d ./build -encoding UTF-8 *.java
-cd build
-jar cvfe YourJar.jar Main  *
-java -jar YourJar.jar
