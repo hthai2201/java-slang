@@ -1,3 +1,8 @@
+file cần thiết nằm trong thư mục ./file
+github: https://github.com/hthai2201/java-slang
+youtube:
+
+// demo 
 Danh sách: 
     nhập số dứng trước chức năng để chọn
     Chọn chức năng thoát để thoát trương trình
