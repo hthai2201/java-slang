@@ -1,9 +1,9 @@
 package Class;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class MenuChoosen {
     ChoosenMenuItem menu;
@@ -28,6 +28,8 @@ public class MenuChoosen {
 
     // render
     public ChoosenMenuItem renderMenu() throws IOException {
+        PrintStream out = new PrintStream(System.out, true, "UTF-8");
+
         int choosenN = this.choosenMenu.size();
         if (choosenN > 0) {
             ChoosenMenuItem curItem = this.menu;
@@ -40,25 +42,24 @@ public class MenuChoosen {
             this.curRenderMenu = this.menu;
         }
 
-        System.out.println("------" + this.curRenderMenu.name + "-------");
+        out.println("------" + this.curRenderMenu.name + "-------");
         List<ChoosenMenuItem> curMenu = this.curRenderMenu.subMenus;
         Integer curMenuN = curMenu.size();
         for (int i = 0; i < curMenuN; i++) {
-            System.out.println((i + 1) + ". " + curMenu.get(i).name);
+            out.println((i + 1) + ". " + curMenu.get(i).name);
         }
         if (this.isBack) {
-            System.out.println((curMenuN+1) + ". Quay lai");
+            out.println((curMenuN + 1) + ". Quay lai");
         }
         if (this.isOut) {
             if (this.isBack) {
-                System.out.println((curMenuN + 2) + ". Thoat");
-            }else{
-                System.out.println((curMenuN + 1) + ". Thoat");
+                out.println((curMenuN + 2) + ". Thoát");
+            } else {
+                out.println((curMenuN + 1) + ". Thoát");
             }
-            
 
         }
-        System.out.println("----------------");
+        out.println("----------------");
 
         Integer choosenIndex = 0;
         IOHelper io = new IOHelper();
@@ -66,7 +67,7 @@ public class MenuChoosen {
         // Reading data using readLine
 
         while (true) {
-            System.out.print("Lua chon:");
+            out.print("Lựa chọn:");
             try {
                 choosenIndex = io.readInt();
             } catch (IOException e) {
@@ -75,37 +76,35 @@ public class MenuChoosen {
             } catch (NumberFormatException e) {
                 //
             }
-            System.out.println(curMenuN);
-            if (choosenIndex < 1 || choosenIndex > curMenuN +1 &&!this.isBack  || (this.isBack &&choosenIndex > curMenuN +2) ) {
-                System.out.println("Lựa chọn không hợp lệ!!");
+            out.println(curMenuN);
+            if (choosenIndex < 1 || choosenIndex > curMenuN + 1 && !this.isBack
+                    || (this.isBack && choosenIndex > curMenuN + 2)) {
+                out.println("Lựa chọn không hợp lệ!!");
             } else {
                 break;
             }
         }
         choosenIndex -= 1;
 
-        if (choosenIndex < 0 || choosenIndex > curMenuN-1) {
+        if (choosenIndex < 0 || choosenIndex > curMenuN - 1) {
             if (this.isBack) {
                 if (choosenIndex == curMenuN) {
-                    this.choosenMenu.remove(curMenuN-1);
+                    this.choosenMenu.remove(curMenuN - 1);
                     return null;
                 }
-                if (choosenIndex == curMenuN+1) {
+                if (choosenIndex == curMenuN + 1) {
                     return null;
                 }
-            }else{
+            } else {
                 if (choosenIndex == curMenuN) {
                     return null;
                 }
             }
-           
-
-            
 
             return this.renderMenu();
         }
-        System.out.println(choosenIndex);
-        System.out.println(curMenuN);
+        out.println(choosenIndex);
+        out.println(curMenuN);
         ChoosenMenuItem item = curMenu.get(choosenIndex);
         this.choosenMenu.add(choosenIndex);
         if (item != null) {

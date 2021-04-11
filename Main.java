@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,7 +12,6 @@ import Class.IOHelper;
 import Class.MenuChoosen;
 import Class.SlangHashMap;
 import Class.Utils;
-import jdk.jshell.execution.Util;
 
 public class Main {
     private static SlangHashMap slang = new SlangHashMap();
@@ -19,8 +20,10 @@ public class Main {
     private static IOHelper io = new IOHelper();
     private static final String slangFilePath = "slang2.txt";
     private static final String slangHistoryFilePath = "slangHistory.txt";
+    private static PrintStream out;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        out = new PrintStream(System.out, true, "UTF-8");
         slang.importData(slangFilePath);
         slangHistory.importData(slangHistoryFilePath);
         mainMenu = Main.getMainMenu();
@@ -35,7 +38,7 @@ public class Main {
 
             } catch (Exception e) {
                 // TODO: handle exception
-                System.out.println(e);
+                out.println(e);
             }
 
         }
@@ -66,7 +69,7 @@ public class Main {
         case "findWord": {
 
             try {
-                System.out.print("Nhập từ cần tìm: ");
+                out.print("Nhập từ cần tìm: ");
                 String key = io.readLine();
                 String value = slang.get(key);
                 if (value != null) {
@@ -79,17 +82,17 @@ public class Main {
 
             } catch (Exception e) {
                 // TODO: handle exception
-                System.out.println("Đã có lỗi xãy ra");
+                out.println("Đã có lỗi xãy ra");
             }
             nextAction();
             break;
         }
 
         case "findMean": {
-            
+
             try {
-                
-                System.out.print("Nhập nghĩa của từ cần tìm: ");
+
+                out.print("Nhập nghĩa của từ cần tìm: ");
                 String value = io.readLine();
                 List<String> result = slang.searchValue(value);
                 if (result != null) {
@@ -102,34 +105,33 @@ public class Main {
                 } else {
                     Utils.printlnPair(value, "Không tìm thấy từ trong hệ thống");
                 }
-                
 
             } catch (Exception e) {
                 // TODO: handle exception
-                // System.out.println("Đã có lỗi xãy ra");
-                System.out.println(e);
+                // out.println("Đã có lỗi xãy ra");
+                out.println(e);
             }
-            
+
             nextAction();
-           
+
             break;
         }
         case "history": {
 
             try {
-                System.out.println("--------- Lịch sử tìm kiếm từ ---------");
+                out.println("--------- Lịch sử tìm kiếm từ ---------");
                 for (Entry<String, String> entry : slangHistory.entrySet()) {
                     Utils.printlnPair(entry);
                 }
                 if (Main.renderMenuConfirm("Bạn có  muốn xoá  lịch sử tìm kiếm không")) {
                     slangHistory.clear();
                     slangHistory.exportData(slangHistoryFilePath);
-                    System.out.println("Xoá lịch sử tìm kiếm thành công");
+                    out.println("Xoá lịch sử tìm kiếm thành công");
                 }
             } catch (Exception e) {
                 // TODO: handle exception
-                // System.out.println("Đã có lỗi xãy ra");
-                System.out.println(e);
+                // out.println("Đã có lỗi xãy ra");
+                out.println(e);
             }
             nextAction();
             break;
@@ -152,7 +154,7 @@ public class Main {
                 while (i > 0) {
                     i--;
 
-                    System.out.print("Nhập từ: ");
+                    out.print("Nhập từ: ");
                     key = io.readLine();
                     if (!key.equals("")) {
                         if (slang.containsKey(key)) {
@@ -178,7 +180,7 @@ public class Main {
                         }
 
                     } else {
-                        System.out.println("Bạn chưa nhập từ cần thêm");
+                        out.println("Bạn chưa nhập từ cần thêm");
                     }
                 }
 
@@ -190,12 +192,12 @@ public class Main {
                 while (i > 0) {
                     i--;
 
-                    System.out.print("Nhập nghĩa của từ: ");
+                    out.print("Nhập nghĩa của từ: ");
                     value = io.readLine();
                     if (!value.equals("")) {
                         break;
                     } else {
-                        System.out.println("Bạn chưa nhập nghĩa từ cần thêm");
+                        out.println("Bạn chưa nhập nghĩa từ cần thêm");
                     }
 
                 }
@@ -210,14 +212,14 @@ public class Main {
                 slang.put(key, value);
                 Utils.printlnPair(key, value);
                 if (isOverride) {
-                    System.out.println("Cập nhật từ  thành công");
+                    out.println("Cập nhật từ  thành công");
                 } else {
-                    System.out.println("Thêm từ mới thành công");
+                    out.println("Thêm từ mới thành công");
                 }
 
             } catch (Exception e) {
                 // TODO: handle exception
-                System.out.println("Đã có lỗi xãy ra");
+                out.println("Đã có lỗi xãy ra");
             }
             nextAction();
             break;
@@ -232,7 +234,7 @@ public class Main {
                 while (i > 0) {
                     i--;
 
-                    System.out.print("Nhập từ: ");
+                    out.print("Nhập từ: ");
                     key = io.readLine();
                     if (!key.equals("")) {
                         if (slang.containsKey(key)) {
@@ -240,16 +242,16 @@ public class Main {
                             break;
 
                         } else {
-                            System.out.println("Từ chưa tồn tại trên hệ thống");
+                            out.println("Từ chưa tồn tại trên hệ thống");
                         }
 
                     } else {
-                        System.out.println("Bạn chưa nhập từ cần sửa");
+                        out.println("Bạn chưa nhập từ cần sửa");
                     }
                 }
 
                 if (!isContinue) {
-                    System.out.println("Cập nhật từ không thành công");
+                    out.println("Cập nhật từ không thành công");
                     nextAction();
                     break;
                 }
@@ -257,12 +259,12 @@ public class Main {
                 while (i > 0) {
                     i--;
 
-                    System.out.print("Nhập nghĩa của từ: ");
+                    out.print("Nhập nghĩa của từ: ");
                     value = io.readLine();
                     if (!value.equals("")) {
                         break;
                     } else {
-                        System.out.println("Bạn chưa nhập nghĩa từ cần sửa");
+                        out.println("Bạn chưa nhập nghĩa từ cần sửa");
                     }
 
                 }
@@ -273,11 +275,11 @@ public class Main {
 
                 slang.put(key, value);
                 Utils.printlnPair(key, value);
-                System.out.println("Cập nhật từ  thành công");
+                out.println("Cập nhật từ  thành công");
 
             } catch (Exception e) {
                 // TODO: handle exception
-                System.out.println("Đã có lỗi xãy ra");
+                out.println("Đã có lỗi xãy ra");
             }
             nextAction();
             break;
@@ -291,7 +293,7 @@ public class Main {
                 while (i > 0) {
                     i--;
 
-                    System.out.print("Nhập từ: ");
+                    out.print("Nhập từ: ");
                     key = io.readLine();
                     if (!key.equals("")) {
                         if (slang.containsKey(key)) {
@@ -301,7 +303,7 @@ public class Main {
                             if (Main.renderMenuConfirm("Bạn có chắc muốn xoá từ này")) {
                                 slang.remove(key);
                                 Utils.printlnPair(key, value);
-                                System.out.println("Xoá từ thành công");
+                                out.println("Xoá từ thành công");
                             }
                             break;
 
@@ -310,13 +312,13 @@ public class Main {
                         }
 
                     } else {
-                        System.out.println("Bạn chưa nhập từ cần thêm");
+                        out.println("Bạn chưa nhập từ cần thêm");
                     }
                 }
 
             } catch (Exception e) {
                 // TODO: handle exception
-                System.out.println("Đã có lỗi xãy ra");
+                out.println("Đã có lỗi xãy ra");
             }
             nextAction();
             break;
@@ -359,16 +361,16 @@ public class Main {
                 if (choose.value.equals(answer.getKey())) {
                     // true
                     Utils.printlnPair(answer);
-                    System.out.println("Đáp án của bạn hoàn toàn chính xác");
+                    out.println("Đáp án của bạn hoàn toàn chính xác");
                     break;
                 } else {
-                    if (times - 1 ==0) {
-                        System.out.println("Sai rồi!!!,Đáp án:");
+                    if (times - 1 == 0) {
+                        out.println("Sai rồi!!!,Đáp án:");
                         Utils.printlnPair(answer);
-                        System.out.println("Chúc bạn may mắn lần sau");
-                      
-                    }else{
-                        System.out.println("Sai rồi!!!,Bạn còn " + (times - 1) + " trả lời");
+                        out.println("Chúc bạn may mắn lần sau");
+
+                    } else {
+                        out.println("Sai rồi!!!,Bạn còn " + (times - 1) + " trả lời");
                     }
                 }
                 menu.popChoosen();
@@ -397,19 +399,19 @@ public class Main {
                 if (choose.value.equals(answer.getKey())) {
                     // true
                     Utils.printlnPair(answer);
-                    System.out.println("Đáp án của bạn hoàn toàn chính xác");
+                    out.println("Đáp án của bạn hoàn toàn chính xác");
                     break;
                 } else {
-                    if (times - 1 ==0) {
-                        
-                        System.out.println("Sai rồi!!!,Đáp án:");
+                    if (times - 1 == 0) {
+
+                        out.println("Sai rồi!!!,Đáp án:");
                         Utils.printlnPair(answer);
-                        System.out.println("Chúc bạn may mắn lần sau");
-                        
-                    }else{
-                        System.out.println("Sai rồi!!!,Bạn còn " + (times - 1) + " trả lời");
+                        out.println("Chúc bạn may mắn lần sau");
+
+                    } else {
+                        out.println("Sai rồi!!!,Bạn còn " + (times - 1) + " trả lời");
                     }
-                    
+
                 }
                 menu.popChoosen();
                 times--;
@@ -426,7 +428,7 @@ public class Main {
     }
 
     public static void nextAction() {
-        System.out.println("Ấn phím bất kì để tiếp tục");
+        out.println("Ấn phím bất kì để tiếp tục");
         io.readLineNoCatch();
         mainMenu.popChoosen();
     }
