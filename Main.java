@@ -18,7 +18,7 @@ public class Main {
     private static SlangHashMap slangHistory = new SlangHashMap();
     private static MenuChoosen mainMenu;
     private static IOHelper io = new IOHelper();
-    private static final String slangFilePath = "slang2.txt";
+    private static final String slangFilePath = "slang.txt";
     private static final String slangHistoryFilePath = "slangHistory.txt";
     private static PrintStream out;
 

@@ -1,0 +1,22 @@
+Danh sách: 
+    nhập số dứng trước chức năng để chọn
+    Chọn chức năng thoát để thoát trương trình
+1)Chức năng tìm từ
+2)Chức năng tìm tất cả từ chứa nghĩa
+3)Lịch sử tìm kiếm từ
+4) Chức năng thêm từ
+    Bình thường
+    Từ tồn tại : trùng với từ vừa thêm
+        Ghi đè từ củ,
+        Thêm nghĩa mới vào 
+5)Khôi phục danh sách từ gốc => Đọc lại dữ liệu từ file
+6) Tìm từ vừa thêm  => không tồn tại
+
+7) Chức năng sửa từ:   '2'
+8) Chức năng xóa từ: '2'
+9) Xuất danh sách từ hiện tại ra file
+10) Tìm từ vừa xóa  => không tồn tại
+11)Xuất ngẫu nhiên 1 từ
+Đố vui: Có thể chọn sai 3 lần  sau đó tự hiện đáp án
+    10) Xuất 1 từ và 4 đáp án  để chọn
+    11) Xuất 1 nghĩa và 4 đáp án để chọn
