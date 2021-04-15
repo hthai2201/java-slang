@@ -1,6 +1,6 @@
 file cần thiết nằm trong thư mục ./file
 github: https://github.com/hthai2201/java-slang
-youtube:
+youtube:https://youtu.be/MQc8Z1PsODY
 
 // Cấu trúc dữ liệu
 Lưu trữ từ bằng HashMap với key là từ hiện tại, value là định nghĩa của từ
