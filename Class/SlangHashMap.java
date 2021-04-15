@@ -79,13 +79,13 @@ public class SlangHashMap extends HashMap<String, String> {
 
     }
 
-    public void exportData(String path) throws UnsupportedEncodingException {
+    public void exportData(String path, Boolean isAppend) throws UnsupportedEncodingException {
         PrintStream out = new PrintStream(System.out, true, "UTF-8");
         if (path.equals("") || path == null) {
             path = "slang.txt";
         }
         try {
-            FileWriter fw = new FileWriter(path, false);
+            FileWriter fw = new FileWriter(path, isAppend);
             BufferedWriter bw = new BufferedWriter(fw);
             PrintWriter pw = new PrintWriter(bw);
             List<String> test = new ArrayList<String>();
@@ -113,6 +113,10 @@ public class SlangHashMap extends HashMap<String, String> {
             e.printStackTrace();
         }
 
+    }
+
+    public void exportData(String path) throws UnsupportedEncodingException {
+        this.exportData(path, true);
     }
 
     public List<String> searchValue(String value) throws UnsupportedEncodingException {

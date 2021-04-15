@@ -330,7 +330,7 @@ public class Main {
             break;
         }
         case "export": {
-            slang.exportData(slangFilePath);
+            slang.exportData(slangFilePath, false);
             nextAction();
             break;
         }

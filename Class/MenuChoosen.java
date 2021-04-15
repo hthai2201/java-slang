@@ -76,7 +76,6 @@ public class MenuChoosen {
             } catch (NumberFormatException e) {
                 //
             }
-            out.println(curMenuN);
             if (choosenIndex < 1 || choosenIndex > curMenuN + 1 && !this.isBack
                     || (this.isBack && choosenIndex > curMenuN + 2)) {
                 out.println("Lựa chọn không hợp lệ!!");
@@ -103,8 +102,6 @@ public class MenuChoosen {
 
             return this.renderMenu();
         }
-        out.println(choosenIndex);
-        out.println(curMenuN);
         ChoosenMenuItem item = curMenu.get(choosenIndex);
         this.choosenMenu.add(choosenIndex);
         if (item != null) {

@@ -2,6 +2,10 @@ file cần thiết nằm trong thư mục ./file
 github: https://github.com/hthai2201/java-slang
 youtube:
 
+// Cấu trúc dữ liệu
+Lưu trữ từ bằng HashMap với key là từ hiện tại, value là định nghĩa của từ
+file data : slang.txt
+file lưu lịch sử tìm kiếm: slanghistory.txt
 // demo 
 Danh sách: 
     nhập số dứng trước chức năng để chọn
@@ -25,3 +29,4 @@ Danh sách:
 Đố vui: Có thể chọn sai 3 lần  sau đó tự hiện đáp án
     10) Xuất 1 từ và 4 đáp án  để chọn
     11) Xuất 1 nghĩa và 4 đáp án để chọn
+Thoát
